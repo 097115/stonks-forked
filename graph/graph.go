@@ -37,6 +37,15 @@ func borderHorizontal(out *string, width int) {
 func GenerateGraph(chart *api.Chart, width int, height int, chartTheme ChartTheme, timezone *time.Location) (string, error) {
 	out := "┏"
 	maxSize := len(strings.Split(chart.High.String(), ".")[0]) + 3
+	// add padding
+	switch maxSize {
+	case 4:
+		maxSize += 3
+	case 5:
+		maxSize += 2
+	case 6:
+		maxSize += 1
+	}
 	borderHorizontal(&out, width+maxSize+3)
 	out += "┓"
 	colour := 92
@@ -58,7 +67,7 @@ func GenerateGraph(chart *api.Chart, width int, height int, chartTheme ChartThem
 		colour = 91
 	}
 	info := fmt.Sprintf(
-		"\n┃\033[95m %s | \033[%dm%s %s (%s%% | %s)\033[95m on %s | ",
+		"\n┃\033[95m %5s | \033[%dm%s %s (%s%% | %s)\033[95m on %s | ",
 		chart.Ticker,
 		colour,
 		chart.Close.StringFixed(2),
